@@ -1,20 +1,24 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
-app.use(express.static('public'));
+
+// Serve static files from the 'public' directory
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Multer configuration
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Routes
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/index.html');
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 app.post('/api/fileanalyse', upload.single('upfile'), (req, res) => {
